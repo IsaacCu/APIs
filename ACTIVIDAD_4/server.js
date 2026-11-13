@@ -27,7 +27,6 @@ let productos = [
 ];
 
 
-let siguienteid=3;
 app.get("/productos", (req, res) => {
     res.status(200).json(productos);
 });
@@ -54,11 +53,18 @@ app.get("/productos/:id", function (req, res) {
 
 
 app.post("/productos", (req, res) => {
+
+  
+    const nuevoId = productos.length > 0
+        ? Math.max(...productos.map(p => p.id)) + 1
+        : 1;
+
+
     const {nombre, precio} =req.body;
     if (!nombre || precio === undefined) {
         return  res.status(400).json({error: "faltan datos"});
     }
-    const nuevo= { id:siguienteid++, nombre, precio, stock: 0};
+    const nuevo= { id:nuevoId, nombre, precio, stock: 0};
     productos.push(nuevo);
     res.status(201).json(nuevo);
 });
